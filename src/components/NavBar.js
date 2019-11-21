@@ -20,14 +20,15 @@ const NavBar = () => {
 
   return (
     <div>
-      <Navbar color={'dark'} dark expand={'md'} className={'mb-5'}>
-        <NavbarBrand href='/'>Something</NavbarBrand>
+      <Navbar color={'dark'} dark expand={'md'} className={'mb-5'} >
+        <NavbarBrand href='/'>Lost in the City</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className='ml-auto' navbar>
             {!isAuthenticated && (
               <NavItem >
                 <Button type={'button'} onClick={() => loginWithRedirect({ redirect_uri: 'http://localhost:3000/search' })}>Login</Button>
+                <Button type={'button'} onClick={() => loginWithRedirect({ redirect_uri: 'http://localhost:3000/favorite' })}>Favorites</Button>
               </NavItem>
             )}
             {isAuthenticated && (

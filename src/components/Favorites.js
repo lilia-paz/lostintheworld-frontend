@@ -1,29 +1,17 @@
 import React from 'react'
 import { Card, CardBody, CardTitle, Row, Col, Table, Button } from 'reactstrap'
-import { useAuth0 } from '../react-auth0-spa'
-import axios from 'axios'
+import { useAuth0 } from "../react-auth0-spa";
 
-const SearchResultTable = props => {
-  const { user } = useAuth0()
+const Favorites = props => {
+  const { loading, user } = useAuth0();
 
-  const handleSave = async (e) => {
+  const handleSave = e => {
     const index = e.target.parentNode.parentNode.getAttribute('label')
     const tobeSaved = props.data[index]
     console.log('data to be saved:', tobeSaved)
     console.log(user.email) 
-    const axiosResponse = await axios({
-      url: '/favorite',
-      method: 'POST',
-      data: {
-        email: user.email,
-        sub: user.sub,
-        name: tobeSaved.name,
-        title: tobeSaved.title,
-        type: tobeSaved.type,
-        location: tobeSaved.location
-      }
-    })
-    console.log(axiosResponse.data)
+
+    //axios -> backend -> save
   }
 
   return (
@@ -31,7 +19,7 @@ const SearchResultTable = props => {
       <Col sm={{ size: 10, offset: 1 }}>
         <Card>
           <CardBody>
-            <CardTitle>Search Result</CardTitle>
+            <CardTitle>Favorites</CardTitle>
             <Table striped>
               <thead>
                 <tr>
@@ -46,7 +34,7 @@ const SearchResultTable = props => {
               <tbody>
                 {(!props.data || props.data.length === 0) && (
                   <tr>
-                    <td colSpan='6'>No data found</td>
+                    <td colSpan='6'>No favorites have been saved yet!</td>
                   </tr>
                 )}
                 {props.data &&
@@ -58,9 +46,6 @@ const SearchResultTable = props => {
                       <td>{element.title}</td>
                       <td>{element.type}</td>
                       <td>{element.location}</td>
-                      <td>
-                        <Button onClick={handleSave}>Save</Button>
-                      </td>
                     </tr>
                   ))}
               </tbody>
@@ -72,4 +57,4 @@ const SearchResultTable = props => {
   )
 }
 
-export default SearchResultTable
+export default Favorites
