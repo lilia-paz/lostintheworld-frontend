@@ -28,7 +28,7 @@ const NavBar = () => {
             {!isAuthenticated && (
               <NavItem >
                 <Button type={'button'} onClick={() => loginWithRedirect({ redirect_uri: 'http://localhost:3000/search' })}>Login</Button>
-                <Button type={'button'} onClick={() => loginWithRedirect({ redirect_uri: 'http://localhost:3000/favorite' })}>Favorites</Button>
+                
               </NavItem>
             )}
             {isAuthenticated && (
@@ -36,6 +36,9 @@ const NavBar = () => {
                 <Button type={'button'} onClick={() => logout()}>
                 Logout
                 </Button>
+              <Button type={'button'} href='http://localhost:3000/favorites'>
+                Favorites
+              </Button>
               </NavItem>
             )}
           </Nav>
@@ -43,24 +46,6 @@ const NavBar = () => {
       </Navbar>
     </div>
   )
-
-  // return (
-  //   <div>
-  //     {!isAuthenticated && (
-  //       <button onClick={() => loginWithRedirect({})}>Log in</button>
-  //     )}
-
-  //     {isAuthenticated && <button onClick={() => logout()}>Log out</button>}
-
-  //     {isAuthenticated && (
-  //       <span>
-  //         <Link to="/">Home</Link>&nbsp;
-  //         <Link to="/profile">Profile</Link>
-  //         <Link to="/external-api">External API</Link>
-  //       </span>
-  //     )}
-  //   </div>
-  // )
 }
 
 export default NavBar
