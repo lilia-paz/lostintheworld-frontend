@@ -1,59 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
 import { Card, CardBody, CardTitle, Row, Col, Table, Button } from 'reactstrap'
 import { useAuth0 } from "../react-auth0-spa";
+import axios from 'axios'
+import SearchResultTable from './SearchResultTable'
 
 const Favorites = props => {
   const { loading, user } = useAuth0();
+  const [favoritesData, setFavoritesData] = useState([])
+
+  useEffect(() => {
+    const getFavorites = async () => {
+
+      const axiosResponse = await axios({
+        url: '/favorites',
+        method: 'POST',
+        data: {
+          email: user.email,
+          sub: user.sub
+        }
+      })
+      setFavoritesData(axiosResponse.data)
+
+    }
+    if (user && user.email && user.sub) {
+
+      getFavorites()
+    }
+  }, [user])
 
   const handleSave = e => {
     const index = e.target.parentNode.parentNode.getAttribute('label')
     const tobeSaved = props.data[index]
     console.log('data to be saved:', tobeSaved)
     console.log(user.email) 
-
-    //axios -> backend -> save
   }
 
+  if (loading || !user) {
+    return (
+      <div>Loading...</div>
+    );
+  }
   return (
-    <Row className='mb-5'>
-      <Col sm={{ size: 10, offset: 1 }}>
-        <Card>
-          <CardBody>
-            <CardTitle>Favorites</CardTitle>
-            <Table striped>
-              <thead>
-                <tr>
-                  <td>#</td>
-                  <td>Name</td>
-                  <td>Title</td>
-                  <td>Type</td>
-                  <td>Location</td>
-                  <td />
-                </tr>
-              </thead>
-              <tbody>
-                {(!props.data || props.data.length === 0) && (
-                  <tr>
-                    <td colSpan='6'>No favorites have been saved yet!</td>
-                  </tr>
-                )}
-                {props.data &&
-                  props.data.length > 0 &&
-                  props.data.map((element, index) => (
-                    <tr key={index} label={index}>
-                      <td>{index + 1}</td>
-                      <td>{element.name}</td>
-                      <td>{element.title}</td>
-                      <td>{element.type}</td>
-                      <td>{element.location}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </Table>
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
+    <SearchResultTable data={favoritesData} />
   )
 }
 
